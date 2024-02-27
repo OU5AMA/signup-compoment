@@ -1,0 +1,26 @@
+.sign-container{
+    font-size: 1.3em;
+}
+
+.inputFieldset{
+    display: flex;
+    margin: 12px 20px;
+}
+
+label{
+    width: 200px;
+}
+
+input{
+    width: 300px;
+    height: 30px;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+button{
+    height: 30px;
+    width: 100px;
+    font-size: large;
+    margin: auto;
+}
