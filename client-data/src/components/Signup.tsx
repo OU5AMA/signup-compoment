@@ -9,7 +9,12 @@ const Signup = () => {
     confirmPassword: "",
   });
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({
+    username: '',
+    email: '', 
+    password: '',
+    confirmPassword: ''
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,7 +28,12 @@ const Signup = () => {
     e.preventDefault();
 
     // Validation rules
-    const newErrors = {};
+    const newErrors = {
+       username: '',
+       email: '',
+       password: '',
+       confirmPassword: '' 
+    };
 
     // Validating username
     if (userData.username.trim().length < 3 || userData.username.trim().length > 50 ) {
@@ -40,7 +50,7 @@ const Signup = () => {
     }
 
 
-    if (!userData.password.trim() < 8) {
+    if (userData.password.trim().length < 8) {
       newErrors.password = "Password must be at least 8 characters long";
     }
 
@@ -80,7 +90,8 @@ const Signup = () => {
         value={userData.username}
         onChange={handleChange}
       />
-      
+        {errors.username && <span className="error">{errors.username}</span>}
+
 
       <label>Email: </label>
       <input
@@ -89,7 +100,7 @@ const Signup = () => {
         value={userData.email}
         onChange={handleChange}
       />
-      
+        {errors.email && <span className="error">{errors.email}</span>}
 
       <label>Password: </label>
       <input
@@ -98,6 +109,7 @@ const Signup = () => {
         value={userData.password}
         onChange={handleChange}
       />
+        {errors.password && <span className="error">{errors.password}</span>}
 
       <label>Confirm Password: </label>
       <input
@@ -106,6 +118,8 @@ const Signup = () => {
         value={userData.confirmPassword}
         onChange={handleChange}
       />
+        {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
+        
       <button type="submit">Sign Up</button>
     </form>
   );
