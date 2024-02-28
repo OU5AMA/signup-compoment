@@ -1,21 +1,26 @@
 import { useState } from "react";
 import "./signup.css";
+import useValidation from "../services/useValidation";
 
-const Signup = () => {
-  const [userData, setUserData] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+interface UserData{
+    username: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+}
 
-  const [errors, setErrors] = useState({
-    username: '',
-    email: '', 
-    password: '',
-    confirmPassword: ''
-  });
+const Signup: React.FC = () => {
 
+    const [userData, setUserData] = useState<UserData>({
+        username: "",
+        email: "",
+        password: '',
+        confirmPassword: '',
+    });
+
+    const {errors, validate} = useValidation();
+
+    
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserData({
@@ -119,7 +124,7 @@ const Signup = () => {
         onChange={handleChange}
       />
         {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
-        
+
       <button type="submit">Sign Up</button>
     </form>
   );
