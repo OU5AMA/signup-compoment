@@ -1,27 +1,19 @@
-import { useState } from "react";
-import "./signup.css";
+// Signup.tsx
+import React, { useState } from "react";
 import useValidation from "../services/useValidation";
-
-interface UserData{
-    username: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-}
+import "./signup.css";
 
 const Signup: React.FC = () => {
+  const { errors, validate } = useValidation();
 
-    const [userData, setUserData] = useState<UserData>({
-        username: "",
-        email: "",
-        password: '',
-        confirmPassword: '',
-    });
+  const [userData, setUserData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-    const {errors, validate} = useValidation();
-
-    
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserData({
       ...userData,
@@ -29,59 +21,28 @@ const Signup: React.FC = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Validation rules
-    const newErrors = {
-       username: '',
-       email: '',
-       password: '',
-       confirmPassword: '' 
-    };
+    const newErrors = validate(userData);
 
-    // Validating username
-    if (userData.username.trim().length < 3 || userData.username.trim().length > 50 ) {
-      newErrors.username = "Username must be between 3 and 50 charcaters long";
-    }else if(!userData.username.trim().match(/^[a-zA-Z0-9_]+$/)){
-        newErrors.username = "Username must contain letters, numbers, and underscores only";
-    }
-
-    // Validating email
-    if (!userData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!userData.email.trim().match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/)) {
-      newErrors.email = "Choose a valid email";
-    }
-
-
-    if (userData.password.trim().length < 8) {
-      newErrors.password = "Password must be at least 8 characters long";
-    }
-
-    if (userData.confirmPassword.trim() !== userData.password.trim()) {
-      newErrors.confirmPassword = "Your passwords do not match!";
-    }
-    setErrors(newErrors);
-
-    // If there are no errors you can proceed with form submission
-    if (Object.keys(newErrors).length === 0) {
-      // handle form submission here
+    if (Object.values(newErrors).every((error) => !error)) {
+      // Proceed with form submission...
       try {
         const response = await fetch("http://localhost:8080/signup", {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(userData)
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
         });
-        if(response.ok){
-            console.log("User signed up successfully! 😎😉");
-        }else{
-            console.error("Failed to signup user. 😒")
+        if (response.ok) {
+          console.log("User signed up successfully! 😎😉");
+        } else {
+          console.error("Failed to signup user. 😒");
         }
       } catch (error) {
-        console.error("Error: ", errors);
+        console.error("Error: ", error);
       }
     }
   };
@@ -95,8 +56,7 @@ const Signup: React.FC = () => {
         value={userData.username}
         onChange={handleChange}
       />
-        {errors.username && <span className="error">{errors.username}</span>}
-
+      {errors.username && <span className="error">{errors.username}</span>}
 
       <label>Email: </label>
       <input
@@ -105,7 +65,7 @@ const Signup: React.FC = () => {
         value={userData.email}
         onChange={handleChange}
       />
-        {errors.email && <span className="error">{errors.email}</span>}
+      {errors.email && <span className="error">{errors.email}</span>}
 
       <label>Password: </label>
       <input
@@ -114,7 +74,7 @@ const Signup: React.FC = () => {
         value={userData.password}
         onChange={handleChange}
       />
-        {errors.password && <span className="error">{errors.password}</span>}
+      {errors.password && <span className="error">{errors.password}</span>}
 
       <label>Confirm Password: </label>
       <input
@@ -123,7 +83,9 @@ const Signup: React.FC = () => {
         value={userData.confirmPassword}
         onChange={handleChange}
       />
-        {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
+      {errors.confirmPassword && (
+        <span className="error">{errors.confirmPassword}</span>
+      )}
 
       <button type="submit">Sign Up</button>
     </form>
