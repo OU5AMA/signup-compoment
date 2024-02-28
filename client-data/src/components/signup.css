@@ -20,6 +20,11 @@ input{
     font-size: 1em;
 }
 
+.error{
+    color: red;
+    font-size: smaller;
+}
+
 button{
     height: 30px;
     width: 100px;
