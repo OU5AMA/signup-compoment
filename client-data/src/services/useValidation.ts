@@ -32,9 +32,9 @@ const useValidation = () => {
     // Validating username
     if (
       userData.username.trim().length < 3 ||
-      userData.username.trim().length > 50
+      userData.username.trim().length > 30
     ) {
-      newErrors.username = "Username must be between 3 and 50 characters long";
+      newErrors.username = "Username must be between 3 and 30 characters long";
     } else if (!userData.username.trim().match(/^[a-zA-Z0-9_]+$/)) {
       newErrors.username =
         "Username must contain letters, numbers, and underscores only";
